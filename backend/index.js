@@ -4,7 +4,7 @@ const dotenv = require("dotenv")
 dotenv.config()
 const bodyParser = require("body-parser")
 const cors = require("cors")
-const serverHealth = require("./routes/healthRoute")
+
 
 const app = express();
 
@@ -13,7 +13,8 @@ app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.json())
 
 //server health API
-app.get("/health", serverHealth)
+app.use("/", require("./routes/userRoute"))
+
 
 
 
