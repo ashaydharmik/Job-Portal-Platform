@@ -7,12 +7,12 @@ const userSchema = new mongoose.Schema({
     },
     email:{
         type: String,
-        required: [true, "Please enter your email"]
+        required: [true, "Please enter your email"],
+        unique: [true, "Email address already exist"]
     },
     phone:{
         type: Number,
-        required: [true, "Please enter your Mobile Number"],
-        unique: [true, "Email address already exist"]
+        required: [true, "Please enter your Mobile Number"]
     },
     password:{
         type: String,

@@ -5,7 +5,7 @@ const {serverHealth, registerUser, loginUser} = require("../Controller/userContr
 
 const router = express.Router();
 
-router.get("/health", serverHealth)
+router.get("/health", serverHealth )
 
 router.post("/register", registerUser)
 

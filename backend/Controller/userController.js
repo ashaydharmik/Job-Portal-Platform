@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken")
 
 
 //server health api
-const serverHealth = (req,res)=>{
+const serverHealth = (req,res,next)=>{
     const healthCheck = {
         uptime: process.uptime(),
         message: 'OK',
@@ -21,15 +21,15 @@ const serverHealth = (req,res)=>{
 
 
 //user registration
-const registerUser = asyncHandler(async(req,res)=>{
+const registerUser = asyncHandler(async(req,res,next)=>{
     const {username, email, phone, password} = req.body;
     if(!username || !email || !phone || !password){
-        res.status(404).json("Please enter all the fields")
+        res.status(400).json({message:"Please enter all the fields"})
     }
 
     const availableUser = await User.findOne({email})
     if(availableUser){
-        res.status(400).json("email already exists")
+        res.status(400).json({message:"email already exists"})
     }
 
     const hashedPassword = await bcrypt.hash(password, 10)
@@ -41,11 +41,11 @@ const registerUser = asyncHandler(async(req,res)=>{
     })
 
     if(user){
-        res.status(200).json({_id: user.id, email: user.email})
+        res.status(201).json({_id: user.id, email: user.email})
     }else{
-        res.json("Invalid user data")
+        res.json({message:"Invalid user data"})
     }
-    res.json("user registered successfully")
+    res.json({message:"user registered successfully"})
 })
 
 
@@ -53,7 +53,7 @@ const registerUser = asyncHandler(async(req,res)=>{
 const loginUser = asyncHandler(async(req,res)=>{
     const {email, password} = req.body;
     if(!email || !password){
-        res.status(404).json("Please enter all the fields")
+        res.status(400).json({message:"Please enter all the fields"})
     }
 
     const user = await User.findOne({email})
@@ -66,9 +66,9 @@ const loginUser = asyncHandler(async(req,res)=>{
             }
         }, process.env.ACCESS_KEY
         )
-        res.status(200).json({accessToken})
+        res.status(201).json({accessToken})
     }else{
-        res.status(400).json("email and password is not valid")
+        res.status(400).json({message:"email and password is not valid"})
     }
 })
 

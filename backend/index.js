@@ -4,6 +4,7 @@ const dotenv = require("dotenv")
 dotenv.config()
 const bodyParser = require("body-parser")
 const cors = require("cors")
+const errorHandler = require("./Middleware/errorHandler")
 
 
 const app = express();
@@ -12,10 +13,10 @@ app.use(cors())
 app.use(bodyParser.urlencoded({extended: false}))
 app.use(express.json())
 
-//server health API
-app.use("/", require("./routes/userRoute"))
+app.use("/", errorHandler,require("./routes/userRoute"))
 
-
+//Error handler middleware 
+app.use(errorHandler)
 
 
 //mongodb connection
