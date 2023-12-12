@@ -4,19 +4,17 @@ const dotenv = require("dotenv")
 dotenv.config()
 const bodyParser = require("body-parser")
 const cors = require("cors")
-const errorHandler = require("./Middleware/errorHandler")
+// const errorHandler = require("./Middleware/errorHandler")
+// const asyncHandler = require("./Middleware/asyncHandler")
 
 
 const app = express();
 
 app.use(cors())
+app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({extended: false}))
-app.use(express.json())
 
-app.use("/", errorHandler,require("./routes/userRoute"))
-
-//Error handler middleware 
-app.use(errorHandler)
+app.use("/", require("./routes/userRoute"))
 
 
 //mongodb connection

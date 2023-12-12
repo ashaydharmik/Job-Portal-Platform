@@ -1,36 +1,52 @@
-const {constants} = require("../constants")
-const errorHandler = (err, req, res, next)=>{
-    const statusCode = res.statusCode ? res.statusCode : 500
-    switch(statusCode){
+const { constants } = require("../constants");
+
+const errorHandler = (err, req, res, next) => {
+    const statusCode = err.statusCode || res.statusCode || constants.SERVER_ERROR;
+
+    let response;
+
+    switch (statusCode) {
         case constants.VALIDATION_ERROR:
-            res.json({title:"Validation failed",
-            message: err.message,
-            stackTrace: err.stack});
+            response = {
+                title: 'Validation failed',
+                message: err.message || 'Validation error',
+                stackTrace: err.stack || null,
+            };
             break;
         case constants.NOT_FOUND:
-            res.json({title:"Not Found",
-            message: err.message,
-            stackTrace: err.stack});
+            response = {
+                title: 'Not Found',
+                message: err.message || 'Resource not found',
+                stackTrace: err.stack || null,
+            };
             break;
         case constants.UNAUTHORIZED:
-            res.json({title:"Unauthorized",
-            message: err.message,
-            stackTrace: err.stack});
+            response = {
+                title: 'Unauthorized',
+                message: err.message || 'Unauthorized access',
+                stackTrace: err.stack || null,
+            };
             break;
         case constants.FORBIDDEN:
-            res.json({title:"Forbidden error",
-            message: err.message,
-            stackTrace: err.stack});
+            response = {
+                title: 'Forbidden error',
+                message: err.message || 'Forbidden access',
+                stackTrace: err.stack || null,
+            };
             break;
         case constants.SERVER_ERROR:
-            res.json({title:"Internal server error",
-            message: err.message,
-            stackTrace: err.stack});
-            break;
-            default:
-                res.json("No Error")
+        default:
+            response = {
+                title: 'Internal Server Error',
+                message: err.message || 'An unexpected error occurred',
+                stackTrace: err.stack || null,
+            };
             break;
     }
-}
+    // Log the error for debugging purposes
+    console.error('Error caught by errorHandler:', err);
+
+    res.status(statusCode).json(response);
+};
 
 module.exports = errorHandler;
