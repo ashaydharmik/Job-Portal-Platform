@@ -43,7 +43,7 @@ const registerUser = asyncHandler(async(req,res)=>{
     })
 
     if(user){
-        res.status(201).json({message:"User successfully created", _id: user.id, email: user.email})
+        res.status(201).json({message:"User successfully created", _id: user.id, recruiterName: user.username})
     }else{
         res.status(400)
         throw new Error("Invalid user data")
@@ -71,7 +71,7 @@ const loginUser = asyncHandler(async(req,res)=>{
         },process.env.ACCESS_KEY,
         {expiresIn: "5m"},
         )
-        res.status(201).json({message:"User Successfully logIn", accessToken, email:user.email})
+        res.status(201).json({message:"User Successfully logIn", accessToken, recruiterName:user.username, id:user.id})
         
     }else{
         res.status(400)

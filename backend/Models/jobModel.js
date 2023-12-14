@@ -1,10 +1,6 @@
 const mongoose = require("mongoose")
 
 const jobSchema = new mongoose.Schema({
-    createdAt:{
-        type: Date, 
-        default: Date.now
-    },
     recruiterName:{
         type:String,
         required: [true, "please enter recruiter name"]
